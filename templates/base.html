@@ -27,25 +27,40 @@
                   {% else %}
                     <a class="nav-link active" aria-current="page" href="{% url 'login' %}">Login</a>                  
                   {% endif %}
-                                   
-                  {% if user.profile.role == 'manager' %}
-                  <li class="nav-item dropdown">
-                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                      Action
-                    </a>
-                    <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
-                      {% if user.is_staff %}
+                  {% if user.is_staff %} 
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
+                        
                         <li><a class="dropdown-item" href="{% url 'promotion' %}">Add Promo</a></li>
                         <li><a class="dropdown-item" href="{% url 'addManager' %}">Add gas staion manager</a></li>
-                      {% else %}
-                        <li><a class="dropdown-item" href="{% url 'agents' %}">Agents</a></li>
-                      {% endif %}
-                      <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
-                      <li><hr class="dropdown-divider"></li>
-                      <li><a class="dropdown-item" href="#">Something else here</a></li>
-                    </ul>
-                    {% endif %}
-                  </li>
+                        <li><a class="dropdown-item" href="#">Create report</a></li>
+                        <li><a class="dropdown-item" href="{% url 'overdraw' %}">Over Fills</a></li>
+                        
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                      </ul>
+                      
+                    </li>  
+                  {% elif user.profile.role == 'manager' %}
+                    <li class="nav-item dropdown">
+                      <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        Action
+                      </a>
+                      <ul class="dropdown-menu" aria-labelledby="navbarDropdown">                        
+                        <li><a class="dropdown-item" href="{% url 'overFilled' %}">Over Fills</a></li>                          
+                        <li><a class="dropdown-item" href="{% url 'agents' %}">Agents</a></li>                       
+                        <li><a class="dropdown-item" href="{% url 'addagents' %}">Add Agents</a></li>                       
+                        <li><a class="dropdown-item" href="{% url 'profile' %}">Profile</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" href="#">Something else here</a></li>
+                      </ul>                      
+                    </li>     
+                  {% endif %} 
+                  
                 </div>
               </div>
             </div>

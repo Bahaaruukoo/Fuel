@@ -1,3 +1,4 @@
+from distutils.log import error
 from django.shortcuts import render, redirect
 from .forms import UserRegisterForm, UpdateUser, UpdateProfile, UpdateMyCachier,EditProfile
 from django.contrib.auth.forms import UserCreationForm
@@ -83,7 +84,7 @@ def agentList(request):
 def addManager(request):    
     form = UserRegisterForm()
     form_p = EditProfile()
-    if request.user.is_staff or request.user.is_admin:
+    if request.user.is_staff or request.user.is_superuser:
         if request.method == 'POST':
             form = UserRegisterForm(request.POST)
             form_p = EditProfile(request.POST)
@@ -98,10 +99,40 @@ def addManager(request):
                 )                
                 message = "Account successfully created"
                 return render(request, 'accounts/echo.html', {'message':message,'form':form ,'form_p':form_p })
-    
-        else:       
+            else:
+                message = "Account creation failed"
+                return render(request, 'accounts/echo.html', {'message':message,'form':form ,'form_p':form_p })
+        else:    
             return render(request, 'accounts/addManager.html', {'form':form ,'form_p':form_p })
     else:
         message = "Account has no permission"
         return render(request, 'accounts/addManager.html', {'message':message,'form':form ,'form_p':form_p })
-   
+
+@login_required   
+def addAgent(request):   
+    form = UserRegisterForm()
+    #form_p = EditProfile()
+    if request.user.profile.role == 'manager': #or request.user.is_superuser:
+        if request.method == 'POST':
+            form = UserRegisterForm(request.POST)
+            #form_p = EditProfile(request.POST)
+
+            if form.is_valid(): # and form_p.is_valid():# and form_p.is_valid():
+                new_user = form.save()
+                #gasst = form_p.cleaned_data['gasstation']
+
+                Profile.objects.create(user=new_user,
+                    gasstation = request.user.profile.gasstation, # gasst, #gasstaion_id, #form.cleaned_data['hotel_id'],
+                    role = 'cashier', #role, #form.cleaned_data['role'],
+                    manager_id = request.user.id
+                )                
+                message = "Account successfully created"
+                return render(request, 'accounts/echo.html', {'message':message,'form':form })
+            else:
+                message = "Account creation failed"
+                return render(request, 'accounts/echo.html', {'message':message,'form':form })
+        else:    
+            return render(request, 'accounts/addManager.html', {'form':form  })
+    else:
+        message = "Account has no permission"
+        return render(request, 'accounts/addManager.html', {'message':message,'form':form  })

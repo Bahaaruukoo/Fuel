@@ -15,22 +15,25 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from offer.views import updateView, searchView, addPromotion
+from offer.views import updateView, searchView, addPromotion, getOverdraw_asStaff, getOverdraw_asManager
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views as accounts_view
 from django.conf import settings
 from django.conf.urls.static import static
 
-urlpatterns = [
+urlpatterns = [ 
     path('admin/', admin.site.urls),
     path('', searchView, name='search'),
     path('<int:pk>/', updateView, name='update'),
     path('promotion/', addPromotion, name='promotion'),
+    path('overdraw/', getOverdraw_asStaff, name='overdraw'),
+    path('overfilled/', getOverdraw_asManager, name='overFilled'),
     path('addmanager/', accounts_view.addManager, name='addManager'),
     path('profile/', accounts_view.profile, name='profile'),
     path('profile/<int:id>/', accounts_view.profileEditor, name='profileEditor'),
     path('register/', accounts_view.register, name='register'),
     path('agents/', accounts_view.agentList, name='agents'),
+    path('addagents/', accounts_view.addAgent, name='addagents'),
     path('login/', LoginView.as_view(template_name='accounts/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
     

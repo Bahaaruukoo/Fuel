@@ -1,3 +1,4 @@
+from asyncio.windows_events import NULL
 from operator import mod
 from pyexpat import model
 from django.db import models
@@ -29,7 +30,6 @@ class dailyUsage(models.Model):
     vehicle = models.ForeignKey(gas_offer, on_delete=models.DO_NOTHING)
     used_amount = models.IntegerField()
     left_amount = models.IntegerField()
-    #gasstation = models.ForeignKey(Gasstation,null=True, on_delete=models.SET_NULL)
     date = models.DateField(default=timezone.now)
     user = models.ForeignKey(User,null=True, on_delete=models.SET_NULL)
     
@@ -38,9 +38,11 @@ class dailyUsage(models.Model):
 
 class log_table(models.Model):
     user = models.ForeignKey(User,null=True, on_delete=models.SET_NULL)
+    vehicle = models.ForeignKey(gas_offer, on_delete=models.DO_NOTHING)
     gasstation = models.ForeignKey(Gasstation,null=True, on_delete=models.SET_NULL)
     date = models.DateField(default=timezone.now)
     filled_amount = models.IntegerField()
+    over_draw = models.IntegerField(null=True, default=0)
 
     def __str__(self):
         return str(self.gasstation) +"  " + str(self.filled_amount) + " litters"

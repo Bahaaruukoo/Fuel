@@ -16,19 +16,25 @@ def updateView(request, pk):
     if request.method == 'POST':
         form = UpdateForm(request.POST)
         if form.is_valid():
-           filled_amount = form.cleaned_data['filled'] 
+           filled_amount = form.cleaned_data['filled']
            today = date.today()
+           over = 0
            if dailyUsage.objects.filter(vehicle= offer, date=today).exists():
                 usage = dailyUsage.objects.get(vehicle= offer, date=today)
                 usage.used_amount = usage.used_amount + filled_amount
                 usage.left_amount = usage.left_amount - filled_amount
                 usage.user = request.user
-           else:                            
-                left = offer.permited_amount - filled_amount
+                if usage.left_amount < 0:
+                    over = usage.left_amount
+           else:
+                left = offer.permited_amount - filled_amount 
                 usage = dailyUsage.objects.create(vehicle = offer, used_amount = filled_amount, left_amount = left, user = request.user)                       
-           
+                if left < 0:
+                    over = left
            usage.save()
-           log = log_table.objects.create(user=request.user, gasstation=request.user.profile.gasstation, date=today, filled_amount= filled_amount)
+            
+           
+           log = log_table.objects.create(user=request.user, vehicle = offer,gasstation=request.user.profile.gasstation, date=today, filled_amount= filled_amount, over_draw=over)
            log.save()
            return render(request, 'success.html', {'result':offer, 'usage':usage})
     return render(request, 'updateOffer.html', {'form':form})
@@ -73,3 +79,13 @@ def addPromotion(request):
         message="Account has no permission"
         return render(request, 'addPromotion.html', {'message':message,'form':form})
 
+def getOverdraw_asStaff(request):
+    today = date.today()
+    overd = log_table.objects.filter(over_draw__lt = 0, date = today)
+    return render(request, 'overdraw.html', {'overd':overd})
+    
+def getOverdraw_asManager(request):
+    today = date.today()
+    overd = log_table.objects.filter(over_draw__lt = 0, date = today, gasstation = request.user.profile.gasstation)
+    return render(request, 'overdraw.html', {'overd':overd})
+    
