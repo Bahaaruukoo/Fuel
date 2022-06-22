@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+    {% block title %}
+        Success
+    {% endblock %}
+    {% block content %}
+
+    <form method="post">
+        {{ form }}
+        <!-- <input type="submit" value="Search">-->
+
+        {% if result %} 
+            <h4>Successfully updated</h4>
+            <div class="card" style="width: 18rem;">
+            <!--<img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body">
+              <h5 class="card-title">{{ result }} Info</h5>
+              <p class="card-text">
+                <Ul>
+                    <li>Permited: {{result.permited_amount}}</li>
+                    <li>Used: {{usage.used_amount}}</li>
+                    <li>Left: {{usage.left_amount}}</li>
+                </Ul>
+              </p>
+              <a href="{% url 'search' %}" class="btn btn-primary">New Search</a>
+            </div>
+        </div>
+        
+        {% endif %}
+        {% csrf_token %}
+    </form>
+   
+    {% endblock %}
+   

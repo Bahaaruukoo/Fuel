@@ -1,0 +1,16 @@
+{% extends 'home.html'%}
+{% block title %}
+Update
+{% endblock %}
+{% block content %}
+    <form method="post">
+        {{ form.as_p }}
+        {{ form_p.as_p }}
+        <input class="btn btn-primary" type="submit" value="Add">
+        {% if message %}
+            <h3>{{message}}</h3>
+            
+        {% endif %}
+        {% csrf_token %}
+    </form>
+{% endblock %}

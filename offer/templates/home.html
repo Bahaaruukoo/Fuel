@@ -1,0 +1,38 @@
+{% extends 'base.html' %}
+
+    {% block title %}
+        Home
+    {% endblock %}
+    {% block content %}
+
+    <form method="post" >
+        {{ form }}
+        <input type="submit" value="Search">
+
+        {% if result %} 
+            <div class="card mt-3" style="width: 18rem;">
+            <!--<img src="..." class="card-img-top" alt="..."> -->
+            <div class="card-body">
+              <h5 class="card-title">{{ result }} Info</h5>
+              <p class="card-text">
+                <Ul>
+                    <li>Permited: {{result.permited_amount}}</li>
+                    {% if todaysBalance %}
+                        <li>Used: {{todaysBalance.used_amount}}</li>
+                        <li>Left: {{todaysBalance.left_amount}}</li>
+                    {% else %}
+                        <li>Used: 0</li>
+                        <li>Left: {{result.permited_amount}}</li>
+                    {% endif %}
+                </Ul>
+              </p>
+              <a href="{% url 'update' pk=result.id %}" class="btn btn-primary">Update</a>
+            </div>
+        </div>
+        
+        {% endif %}
+        {% csrf_token %}
+    </form>
+   
+    {% endblock %}
+   
