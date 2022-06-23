@@ -3,14 +3,23 @@
 Update
 {% endblock %}
 {% block content %}
-    <form method="post">
-        {{ form.as_p }}
-        {{ form_p.as_p }}
-        <input class="btn btn-primary" type="submit" value="Add Promotion">
-        {% if message %}
-            <h3>{{message}}</h3>
-            
-        {% endif %}
-        {% csrf_token %}
-    </form>
+    <div class="card mt-3 bg-light" style="width: 18rem;">
+        <!--<img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+        <h4 class="card-title">Insert vehicle ID</h4>
+        <p class="card-text mt-3 ">
+            <form method="post">
+                {{ form.as_p }}
+                {{ form_p.as_p }}
+                <input class="btn btn-primary" type="submit" value="Add Promotion">
+                {% if message %}
+                    <h3>{{message}}</h3>
+                    
+                {% endif %}
+                {% csrf_token %}
+            </form>
+        </p>
+        </div>
+    </div>
+   
 {% endblock %}

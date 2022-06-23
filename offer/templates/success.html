@@ -4,31 +4,29 @@
         Success
     {% endblock %}
     {% block content %}
-
-    <form method="post">
-        {{ form }}
-        <!-- <input type="submit" value="Search">-->
-
-        {% if result %} 
-            <h4>Successfully updated</h4>
-            <div class="card" style="width: 18rem;">
-            <!--<img src="..." class="card-img-top" alt="..."> -->
-            <div class="card-body">
-              <h5 class="card-title">{{ result }} Info</h5>
-              <p class="card-text">
-                <Ul>
-                    <li>Permited: {{result.permited_amount}}</li>
-                    <li>Used: {{usage.used_amount}}</li>
-                    <li>Left: {{usage.left_amount}}</li>
-                </Ul>
-              </p>
-              <a href="{% url 'search' %}" class="btn btn-primary">New Search</a>
-            </div>
+    
+        <br>
+    {% if result %} 
+        <br>
+        <div class="card mt-5 bg-light" style="width: 18rem;">
+        <!--<img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+            <h4 class="my-3">Successfully updated</h4>
+        <h5 class="card-title">{{ result }} Info</h5>
+        <p class="card-text">
+            <Ul>
+                <li>Permited: {{result.permited_amount}}</li>
+                <li>Used: {{usage.used_amount}}</li>
+                <li>Left: {{usage.left_amount}}</li>
+            </Ul>
+        </p>
+        <a href="{% url 'search' %}" class="btn btn-primary">OK</a>
         </div>
+        </div>
+    {% endif %}
+       
         
-        {% endif %}
-        {% csrf_token %}
-    </form>
-   
+     
+  
     {% endblock %}
    

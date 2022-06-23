@@ -11,12 +11,13 @@ from django.contrib.auth.decorators import login_required
 def updateView(request, pk):
     offer = get_object_or_404(gas_offer, pk=pk)
     if offer.status == False:
-        return render(request, 'noPermission.html')
+        message = "There is an error. Contact your admin"
+        return render(request, 'echo.html', {'message':message})
     form = UpdateForm()
     if request.method == 'POST':
         form = UpdateForm(request.POST)
         if form.is_valid():
-           filled_amount = form.cleaned_data['filled']
+           filled_amount = form.cleaned_data['filled_amount']
            today = date.today()
            over = 0
            if dailyUsage.objects.filter(vehicle= offer, date=today).exists():
@@ -31,15 +32,18 @@ def updateView(request, pk):
                 usage = dailyUsage.objects.create(vehicle = offer, used_amount = filled_amount, left_amount = left, user = request.user)                       
                 if left < 0:
                     over = left
-           usage.save()
-            
-           
+           usage.save()         
            log = log_table.objects.create(user=request.user, vehicle = offer,gasstation=request.user.profile.gasstation, date=today, filled_amount= filled_amount, over_draw=over)
            log.save()
-           return render(request, 'success.html', {'result':offer, 'usage':usage})
+           return redirect('echo') #render(request, 'success.html', {'result':offer, 'usage':usage})
     return render(request, 'updateOffer.html', {'form':form})
 
+def echo(request):
+    message = "Successfully completed"
+    return render(request, 'echo.html', {'message': message})
+
 def searchView(request):
+    message = "Not subsidy previlage"
     form1 = SearchForm()
     if request.method == 'POST':
         form = SearchForm(request.POST)
@@ -49,12 +53,12 @@ def searchView(request):
             if gas_offer.objects.filter(plate_number=searchWord).exists():
                 result = gas_offer.objects.get(plate_number=searchWord)
             else:
-                return render(request, 'noDiscount.html', {'form':form1})
+                return render(request, 'echo.html', {'message':message, 'form':form1})
             if result.status == True:
                 if dailyUsage.objects.filter(vehicle = result, date = today).exists():
                     todaysBalance = dailyUsage.objects.get(vehicle = result, date = today)
-                    return render(request, 'home.html', {'result':result, 'todaysBalance':todaysBalance, 'form':form1})    
-                else: 
+                    return render(request, 'home.html', {'result':result, 'todaysBalance':todaysBalance})    
+                else:                     
                     return render(request, 'home.html', {'result':result, 'form':form1})    
         
     return render(request, 'home.html', {'form':form1})

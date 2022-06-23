@@ -15,7 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from offer.views import updateView, searchView, addPromotion, getOverdraw_asStaff, getOverdraw_asManager
+from offer.views import echo, updateView, searchView, addPromotion, getOverdraw_asStaff, getOverdraw_asManager
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views as accounts_view
 from django.conf import settings
@@ -25,6 +25,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', searchView, name='search'),
     path('<int:pk>/', updateView, name='update'),
+    path('success/', echo, name='echo'),
     path('promotion/', addPromotion, name='promotion'),
     path('overdraw/', getOverdraw_asStaff, name='overdraw'),
     path('overfilled/', getOverdraw_asManager, name='overFilled'),
