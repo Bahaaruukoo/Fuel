@@ -59,7 +59,7 @@ def searchView(request):
                     todaysBalance = dailyUsage.objects.get(vehicle = result, date = today)
                     return render(request, 'home.html', {'result':result, 'todaysBalance':todaysBalance})    
                 else:                     
-                    return render(request, 'home.html', {'result':result, 'form':form1})    
+                    return render(request, 'home.html', {'result':result})    
         
     return render(request, 'home.html', {'form':form1})
 
