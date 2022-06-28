@@ -16,12 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import re_path as url
-from offer.views import * #echo, updateView, searchView, addPromotion, getOverdraw_asStaff, getOverdraw_asManager
+from offer.views import echo, updateView, searchView, addPromotion, getOverdraw_asManager, approveAudit, getOverdraw_asAuditor, dailyBalanceWork, approve, unaudited, paymentRequests, paymentDetail
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views as accounts_view
 from django.conf import settings
 from django.conf.urls.static import static
-dailyBalanceWork
+
 urlpatterns = [ 
     path('admin/', admin.site.urls),
     path('', searchView, name='search'),

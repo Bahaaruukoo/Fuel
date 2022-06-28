@@ -1,11 +1,5 @@
-from dataclasses import fields
-from email.policy import default
-from logging import PlaceHolder
-from pyexpat import model
-from tkinter import Widget
-from xml.dom.minidom import Attr
 from django import forms
-from .models import Audited, Gas_offer, Gasstation, log_table
+from .models import Audited, Gas_offer, log_table
 
 class SearchForm(forms.Form):
     search = forms.CharField()

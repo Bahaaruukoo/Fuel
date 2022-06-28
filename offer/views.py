@@ -1,10 +1,7 @@
-from asyncio.windows_events import NULL
-from email import message
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
-
 from accounts.models import Profile
-from .models import * #Audited, Gas_offer, DailyUsage, Gasstation, log_table
+from .models import Audited, Gas_offer, DailyUsage, Gasstation, log_table
 from .forms import AuditForm, SearchForm, UpdateForm, PromoCodeForm, PaymentForm
 from datetime import date
 from django.contrib.auth.decorators import login_required

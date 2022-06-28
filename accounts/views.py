@@ -1,11 +1,7 @@
-from asyncio.windows_events import NULL
-from distutils.log import error
 from django.shortcuts import render, redirect
-from .forms import * #UserRegisterForm, UpdateUser, UpdateProfile, UpdateMyCachier,EditProfile
-from django.contrib.auth.forms import UserCreationForm
+from .forms import UserRegisterForm, UpdateUser, UpdateProfile, UpdateMyCachier,EditProfile
 from django.contrib.auth.decorators import login_required
 from .models import Profile
-from django.contrib.auth.models import User
 
 
 @login_required
