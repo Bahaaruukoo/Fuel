@@ -6,19 +6,45 @@
     {% block content %}
     
         <br>
-    {% if result %} 
+    
         <br>
-        <div class="card mt-5 bg-light text-center" style="width: 18rem;">
+        <div class="card mt-5 bg-light text-center" style="width: 48rem;">
         <!--<img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
-        <h5 class="card-title">Payment Completed</h5>
+        <h5 class="card-title">Payment Confirmation</h5>
         <p class="card-text">
-            content coming soon
+            <p>Date: {{ Compn.date  }}</p>
+            Serial No. {{ Compn.id }}
+            <table  cellpadding = "5" cellspacing = "5" class="bg-light table table-bordered mt-2">
+                <thead >
+                    <th>Gas Station</th>
+                    <th>Total payment</th>
+                    <th>Audit Number</th>
+                    <th>Payee</th>
+                    
+                </thead>        
+                
+                <tbody>
+                    
+                <tr class="table-success">
+                    <td>{{ Compn.gasstation.name }}</td>
+                    <td>{{ Compn.total_money }}</td>
+                    <td>{{ Compn.audit.id }}</td>
+                    <td>{{ money_reciever }}</td>
+
+                </tr>
+                </tbody>              
+                                
+            </table>
+            Paid by: {{ Compn.financer.first_name }} {{ Compn.financer.last_name }}
+           
         </p>
-        <a href="{% url 'payments' %}" class="btn btn-primary">OK</a>
+        <div class="my-5">
+            <a href="{% url 'payments' %}" class="btn btn-primary">Done</a>
+            <a href="#" class="btn btn-primary">Print</a>
         </div>
         </div>
-    {% endif %}   
+        </div> 
         
     {% endblock %}
    

@@ -14,7 +14,7 @@ class Profile(models.Model):
         ('staff','Staff')
     )
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='profile')
-    manager_id = models.IntegerField(null=True, default=NULL)
+    manager_id = models.IntegerField(null=True, blank=True)
     role = models.CharField(choices= roles, max_length=20, null= True, )
     gasstation = models.ForeignKey(Gasstation, on_delete=models.CASCADE, null= True, blank = True)#, default=NULL)
     image = models.ImageField(default='default.jpg', upload_to = 'profile_pics')

@@ -8,18 +8,18 @@
         <br>
     {% if result %} 
         <br>
-        <div class="card mt-5 bg-light text-center" style="width: 18rem;">
+        <div class="card mt-5 bg-light " style="width: 38rem;">
         <!--<img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
-        <h5 class="card-title">Available payment requests</h5>
+        <h5 class="card-title text-center">Available payment requests</h5>
         <p class="card-text">
-            <Ul>
+            <Ol>
                 {% for payment in result %}
                     <li><a href="{% url 'paymentDetail' payment.id %}">{{ payment }}</a></li>                    
                 {% endfor %}
-            </Ul>
+            </Ol>
         </p>
-        <a href="{% url 'search' %}" class="btn btn-primary">OK</a>
+        <a href="{% url 'search' %}" class="btn btn-primary mx-5">OK</a>
         </div>
         </div>
     {% endif %}

@@ -49,17 +49,7 @@ class DailyUsage(models.Model):
     
     def __str__(self):
         return str(self.used_amount )
-class Compensation(models.Model):
-    pass
-    '''user = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='auditor') #Auditor
-    date = models.DateField(default=timezone.now)
-    total_filled = models.IntegerField()
-    total_money = models.DecimalField(max_digits=12, decimal_places=2)
-    gasstation = models.ForeignKey(Gasstation, on_delete=models.DO_NOTHING, related_name='gasstation')
-   
-    def __str__(self):
-        return str(self.total_filled) + "liters by "+ self.cashier + ". Cash: " + str(self.total_money) + "To: " + self.Audited_by  
-    '''
+
 
 class Audited(models.Model):
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)
@@ -79,8 +69,18 @@ class Audited(models.Model):
     money_reciever = models.TextField(null=True, blank=True, max_length=250)
 
     def __str__(self):
-        return self.gasstation.name + ": " + str(self.total_money_compansated) + " --on: " + str(self.date)
+        return self.gasstation.name + ": " + str(self.total_money_compansated) + " --on: " + str(self.date) + "     ("+str(self.date) + " - " + str(self.date) +")"
 
+class Compensation(models.Model):
+    financer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='financer',  null=True, blank=True) #Auditor
+    date = models.DateField(default=timezone.now)
+    total_money = models.DecimalField(max_digits=12, decimal_places=2, default = 0)
+    audit = models.ForeignKey(Audited, on_delete=models.DO_NOTHING, null=True, blank=True)
+    gasstation = models.ForeignKey(Gasstation, on_delete=models.DO_NOTHING, related_name='gasstation',  null=True, blank=True)
+   
+    def __str__(self):
+        return " Birr: " + str(self.total_money) + " to::::=> " + self.gasstation.name  
+    
 class log_table(models.Model):
     user = models.ForeignKey(User,null=True, on_delete=models.SET_NULL) #cashier
     vehicle = models.ForeignKey(Gas_offer, on_delete=models.DO_NOTHING, related_name='vehicle')

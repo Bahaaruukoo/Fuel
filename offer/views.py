@@ -1,7 +1,7 @@
 from django.shortcuts import redirect, render
 from django.shortcuts import get_object_or_404
 from accounts.models import Profile
-from .models import Audited, Gas_offer, DailyUsage, Gasstation, log_table
+from .models import Audited, Gas_offer, DailyUsage, Gasstation, log_table, Fuel, Compensation
 from .forms import AuditForm, SearchForm, UpdateForm, PromoCodeForm, PaymentForm
 from datetime import date
 from django.contrib.auth.decorators import login_required
@@ -10,7 +10,8 @@ from django.db.models import Sum
 # Create your views here.
 @login_required
 def updateView(request, pk, fuel_typ):
-    if request.user.is_staff or request.user.is_superuser:
+    #if request.user.is_staff or request.user.is_superuser:
+    if request.user.profile.role !='cashier' or request.user.profile.role !='manager':
         message = "You have no previlage"
         return render(request, 'echo.html', {'message':message})
         
@@ -99,12 +100,25 @@ def getOverdraw_asManager(request, id):
     overd = log_table.objects.filter(user = cashier.user, over_draw__lt = 0, date = today, gasstation = request.user.profile.gasstation)
     return render(request, 'overdraw.html', {'overd':overd})
 
-def dailyBalanceWork(request, id):    
+def dailyBalanceWork(request, id):   
+    net_ben =0
+    net_pet = 0 
     today = date.today()
     cashier = Profile.objects.get(id=id)
-    todaySalesVolume = log_table.objects.filter(user=cashier.user, date=today, dailyBalanceDone = 0).aggregate(Total=Sum('filled_amount'), Loss=Sum('over_draw'))
-    message = "Message of the day " + str(today)
-    return render(request, 'balance.html', {'id':id,'cashier':cashier, 'message':message, 'balance':todaySalesVolume})
+    todaySalesVolume = log_table.objects.filter(user=cashier.user, date=today, dailyBalanceDone = 0)
+    benz =todaySalesVolume.filter(fuel=1).aggregate(Total=Sum('filled_amount'), Loss=Sum('over_draw'))
+    petr =todaySalesVolume.filter(fuel=2).aggregate(Total=Sum('filled_amount'), Loss=Sum('over_draw'))
+    
+    if benz['Total'] is not None:
+        net_ben = benz['Total'] 
+        if benz['Loss'] is not None:
+            net_ben = net_ben + benz['Loss']
+    
+    if petr['Total'] is not None:
+        net_pet =petr['Total']
+        if petr['Loss'] is not None:
+            net_pet = net_pet + petr['Loss']
+    return render(request, 'balance.html', {'id':id,'cashier':cashier, 'net_ben':net_ben,'net_pet':net_pet, 'today':today, 'benz':benz, 'petr':petr, 'result':todaySalesVolume})
 
 def approve(request, id):
     today = date.today()
@@ -179,6 +193,7 @@ def approveAudit(request ,pk, start_date, end_date):
     money_for_ben = compensated_ben * ben_price
     money_for_pet = compensated_pet * pet_price
     money_compansated = money_for_ben + money_for_pet
+
     audit = Audited.objects.create(user=request.user, date=today, 
     compensated_benzen= compensated_ben, money_for_benzene= money_for_ben,
     compensated_petrol= compensated_pet, money_for_petrol= money_for_pet, 
@@ -192,16 +207,25 @@ def approveAudit(request ,pk, start_date, end_date):
 def paymentRequests(request):
     result = Audited.objects.filter(compansating_agent__isnull = True)
     return render(request, 'payments.html', {'result':result})
-
+    
 def paymentDetail(request, id):    
     form = PaymentForm()
     result = Audited.objects.filter(id = id)
+    myObj = result.first()
     if request.method == 'POST':
         today = date.today()
         form = PaymentForm(request.POST)
         if form.is_valid():            
             money_reciever = form.cleaned_data['money_reciever']
             result.update(money_reciever = money_reciever, compensated_date = today, compansating_agent = request.user)
-            return render(request, 'paymentConfirm.html',{'result':result})
+            
+            Compn = Compensation.objects.create(
+               financer = request.user,
+               total_money = myObj.total_money_compansated,
+               audit = myObj,
+               gasstation = myObj.gasstation
+            )
+            Compn.save()
+            return render(request, 'paymentConfirm.html',{ 'money_reciever':money_reciever ,'Compn':Compn})
     return render(request, 'paymentDetail.html', {'result':result, 'form':form})
 
