@@ -1,0 +1,67 @@
+{% extends 'base.html' %}
+
+    {% block title %}
+        Success
+    {% endblock %}
+    {% block content %}           
+        <br>
+        <div class="card mt-5" style="width: 38rem;">
+        <!--<img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+        <h5 class="card-title"> Payment Draft</h5>
+        <p class="card-text">
+            <table cellpadding = "5" cellspacing = "5" class="table table-bordered">    
+                <thead>
+                <tr>
+                    <th> Benzene </th>                    
+                    <th> Petrol</th>                    
+                    <th> Priod </th>
+                </tr>
+                </thead>
+                <tbody>
+
+                {% if result %} 
+                    {% for record in result %}                                      
+                    <tr> 
+                        <td>Amount: {{ record.compensated_benzen }} Lit <br>
+                            Payment: {{ record.money_for_benzene}} Birr
+                        </td>                        
+                        <td>Amount: {{ record.compensated_petrol }} Lit<br>
+                            Payment: {{ record.money_for_petrol }} Birr
+                        </td>
+                        <td>From: {{ record.audit_date_from }} <br>
+                            To: {{ record.audit_date_to }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="blank_row"><td colspan="3"></td></tr>
+                                        
+                    <tr class="blank_row"><td colspan="3"></td></tr>
+                    
+                        {% for record in result %}  
+                        <tr><td colspan="3"><strong>Gas Station:</strong> {{record.gasstation.name}} 
+                            <strong>ID</strong>: {{record.gasstation.identifier}}
+                        </tr>
+                        <tr><td colspan="3"> <strong>Total Payment:</strong> {{record.total_money_compansated}} bir
+                        </tr>
+                        
+                        {% endfor %}  
+                    {% endif %}
+                </tbody>
+            </table>       
+            
+            <form action="" method="post">
+                {{form}}
+                {%csrf_token %}
+                <div class="mt-3 mx-5">
+                    <input class="btn btn-primary" type="submit" value="Complete Payment">
+                    <a href="{% url 'search'  %}" class="btn btn-primary">Cancel</a>
+                </div>
+                
+            </form>            
+        
+        </p>        
+        </div>
+        </div>  
+    {% endblock %}
+   

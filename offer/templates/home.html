@@ -7,7 +7,7 @@
         
     <form method="post" >
         {% if form %} 
-            <div class="card mt-3 bg-light" style="width: 18rem;">
+            <div class="card mt-3 bg-light text-center" style="width: 18rem;">
                 <!--<img src="..." class="card-img-top" alt="..."> -->
                 <div class="card-body">
                 <h4 class="card-title">Insert vehicle ID</h4>
@@ -21,22 +21,23 @@
         {% if result %} 
             <div class="card mt-3 bg-light" style="width: 18rem;">
             <!--<img src="..." class="card-img-top" alt="..."> -->
-            <div class="card-body">
+            <div class="card-body text-center">
               <h5 class="card-title">ID: {{ result }} </h5>
-              <p class="card-text">
-                <Ul>
-                    <li>Permited: {{result.permited_amount}}</li>
-                    {% if todaysBalance %}
+                <div class="text-start mt-3 mb-5">
+                        <h5 class="bg-red"><h4>{{ result.fuel }}</h4></h5>
+                    <UL>
+                        <li>Permited: {{result.permited_amount}}</li>
+                            {% if todaysBalance %}
                         <li>Used: {{todaysBalance.used_amount}}</li>
                         <li>Left: {{todaysBalance.left_amount}}</li>
-                    {% else %}
+                            {% else %}
                         <li>Used: 0</li>
                         <li>Left: {{result.permited_amount}}</li>
-                    {% endif %}
-                </Ul>
-              </p>
-              <a href="{% url 'update' pk=result.id %}" class="btn btn-warning ">Gas Filled</a>
-              <a href="{% url 'search' %}" class="btn btn-primary justify-content-right">Back</a>
+                            {% endif %}
+                    </UL>
+                </div>         
+              <a href="{% url 'update' pk=result.id fuel_typ=result.fuel.id %}" class="btn btn-warning">Gas Filled</a>
+              <a href="{% url 'search' %}" class="btn btn-primary"> Back</a>
             </div>
         </div>
         

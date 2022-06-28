@@ -1,16 +1,36 @@
 {% extends 'base.html' %}
 
     {% block content %}
+    <!--
+    <div class="container mt-5" >
+      <div class="d-flex justify-content-center" >
+        <form  method="post">
+
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input class="btn btn-primary" type="submit" name="submit" value="submit">
+        </form>
+      </div>
+    </div>
+    -->
+
+    <br>
+    <div class="card mt-5 bg-light text-center" style="width: 18rem;">
+    <!--<img src="..." class="card-img-top" alt="..."> -->
+    <div class="card-body">
+    <h5 class="card-title">Please sign in here</h5>
+    <p class="card-text">
+      <div class="d-flex justify-content-center" >
+        <form method="post">    
+          {% csrf_token %}
+          {{ form.as_p }}
+          <input class="btn btn-primary" type="submit" name="submit" value="submit">
+        </form>
+      </div>
+    </p>
+    </div>
+    </div>
     
-<div class="container mt-5" >
-  <div class="d-flex justify-content-center" >
-    <form  method="post">
-
-      {% csrf_token %}
-      {{ form.as_p }}
-      <input class="btn btn-primary" type="submit" name="submit" value="submit">
-    </form>
-  </div>
-
-</div>
     {% endblock %}
+
+    

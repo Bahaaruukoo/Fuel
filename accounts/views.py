@@ -1,6 +1,7 @@
+from asyncio.windows_events import NULL
 from distutils.log import error
 from django.shortcuts import render, redirect
-from .forms import UserRegisterForm, UpdateUser, UpdateProfile, UpdateMyCachier,EditProfile
+from .forms import * #UserRegisterForm, UpdateUser, UpdateProfile, UpdateMyCachier,EditProfile
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.decorators import login_required
 from .models import Profile
@@ -18,11 +19,7 @@ def register(request):
 
             if form.is_valid():# and form_p.is_valid():
                 new_user = form.save()
-                
-                #role = form_p.cleaned_data['role']
-                #gasstaion_id = form_p.cleaned_data['gasstaion']
-
-
+       
                 Profile.objects.create(user=new_user,
                     manager_id= id, #form.cleaned_data['manager_id'],
                     gasstation = gasst, #gasstaion_id, #form.cleaned_data['hotel_id'],
@@ -107,6 +104,34 @@ def addManager(request):
     else:
         message = "Account has no permission"
         return render(request, 'accounts/addManager.html', {'message':message,'form':form ,'form_p':form_p })
+
+
+@login_required   
+def addAuditorFinance(request, act):   
+    form = UserRegisterForm()
+    #form_p = EditProfile()
+    if request.user.is_superuser or request.user.is_staff:
+        if request.method == 'POST':
+            form = UserRegisterForm(request.POST)
+            #form_p = EditProfile(request.POST)
+
+            if form.is_valid(): 
+                new_user = form.save()
+
+                Profile.objects.create(user=new_user,
+                    role = act 
+                )                
+                message = "Account successfully created"
+                return render(request, 'accounts/echo.html', {'message':message,'form':form })
+            else:
+                message = "Account creation failed"
+                return render(request, 'accounts/echo.html', {'message':message,'form':form })
+        else:    
+            return render(request, 'accounts/addManager.html', {'form':form  })
+    else:
+        message = "Account has no permission"
+        return render(request, 'accounts/addManager.html', {'message':message,'form':form  })
+
 
 @login_required   
 def addAgent(request):   

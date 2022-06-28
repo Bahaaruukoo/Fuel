@@ -1,0 +1,86 @@
+{% extends 'base.html' %}
+{% load static %}
+    {% block title %}
+        Success
+    {% endblock %}
+    {% block content %}
+    {% if message %} 
+    <div class="card mt-3 bg-light text-center" style="width: 18rem;">
+        <!--<img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+        <h5 class="card-title"><h4>{{message}}</h4></h5>
+        <p class="card-text">            
+            <img src="{% static 'media/default.jpg'%}" alt="Image" sizes="" srcset="">
+            <i class="fas fa-ban"></i>
+        </p>           
+        <a  href="{% url 'search' %}" class="btn btn-primary ml-5"><h4>OK</h4></a>
+    </div>
+    </div>
+
+    {% endif %} 
+        <br>
+        <div class="card mt-5" style="width: 38rem;">
+        <!--<img src="..." class="card-img-top" alt="..."> -->
+        <div class="card-body">
+        <h5 class="card-title"> {{ gasstation.name }} {{ gasstation.identifier }}</h5>
+        <p class="card-text">
+            <table cellpadding = "5" cellspacing = "5" class="table table-bordered">    
+                <thead>
+                <tr>
+                    <th> Vehicle </th>
+                    <th> Fuel </th>
+                    <th> Used Fuel Amount </th>
+                    <th> Over Filled Fuel </th>
+                    <th> Date </th>
+                </tr>
+                </thead>
+                <tbody>
+                    {% if result %} 
+                    {% for record in result %}                    
+                    <tr> 
+                        <td>{{ record.vehicle }}</td>
+                        <td>{{ record.fuel}}</td>
+                        <td>{{ record.filled_amount }}</td>
+                        <td>{{ record.over_draw }}</td>
+                        <td>{{ record.date }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr class="blank_row"><td colspan="3"></td></tr>
+                    <tr>
+                        <td colspan="2">Total benzene: </td>
+                        <td>{{ben_totalfill.Total}}</td>
+                        <td>{{ ben_totalfill.Loss }}</td>
+                    </tr> 
+                    <tr>
+                        <td colspan="2">Total petrol: </td>
+                        <td>{{ pet_totalfill.Total}}</td>
+                        <td>{{ pet_totalfill.Loss }}</td>
+                    </tr>                    
+                    <tr class="blank_row"><td colspan="3"></td></tr>
+                    <tr><td colspan="5">Compansable Benzene Amount:
+                        {{ben_totalfill.Total}} + {{ ben_totalfill.Loss}} = {{ben_final}} Liters</td>
+                    </tr>
+                    <tr><td colspan="5">Compansable Petrol Amount:
+                        {{pet_totalfill.Total}} + {{ pet_totalfill.Loss}} = {{pet_final}} Liters</td>
+                    </tr>
+                    {% endif %} 
+                </tbody>
+            </table>       
+            <div>                
+                {% if result %}
+                <a class="btn btn-primary" href="{% url 'approveAudit' pk=gasstation.id start_date=startD end_date=endD %}"> Approve Audit</a>
+                <a class="btn btn-outline-primary" href="{% url 'search' %}">Cancel</a>
+                {% else %}
+                <p>There is no record to edit for the period</p>
+                <a class="btn btn-outline-primary" href="{% url 'audit' %}">Cancel</a>
+               
+                {% endif %}
+            </div>
+        
+        </p>        
+        </div>
+        </div>  
+          
+  
+    {% endblock %}
+   

@@ -38,3 +38,8 @@ class EditProfile(forms.ModelForm):
     class Meta:
         model = Profile
         fields = ['gasstation' ]
+
+class addAuditorFinanceForm(forms.ModelForm):
+    class Meta:
+        model = Profile
+        fields = ['role']

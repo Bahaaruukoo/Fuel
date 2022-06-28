@@ -3,8 +3,8 @@
 Over draw
 {% endblock %}
 {% block content %}
-    <table border="1" cellpadding = "5" cellspacing = "5" class="bg-light">
-        <tr >
+    <table  cellpadding = "5" cellspacing = "5" class="bg-light table table-bordered">
+        <thead >
             <!--
             <td>Vehicle</td>
             <td>Gas Station</td>
@@ -20,9 +20,12 @@ Over draw
             <th>Amount Filled</th>
             <th>Over Fill</th> 
             <th>Agent</th>
-        </tr>        
+        </thead>        
         {% for over in overd %}
-        <tr>
+        
+        <tbody>
+            {% if over.dailyBalanceDone > 0 %}
+        <tr class="table-success">
             <td>{{ over.vehicle }}</td>
             <td>{{ over.gasstation }}</td>
             <td>{{ over.date }}</td>
@@ -30,6 +33,19 @@ Over draw
             <td>{{ over.over_draw }}</td>
             <td>{{ over.user }}</td>
         </tr>
+        {% else %}
+        <tr class="table-info">
+            <td>{{ over.vehicle }}</td>
+            <td>{{ over.gasstation }}</td>
+            <td>{{ over.date }}</td>
+            <td>{{ over.filled_amount }}</td>
+            <td>{{ over.over_draw }}</td>
+            <td>{{ over.user }}</td>
+        </tr>
+        {% endif %}
+        </tbody>
+        
+        
             
         {% endfor %} 
         

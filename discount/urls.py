@@ -15,21 +15,31 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-from offer.views import echo, updateView, searchView, addPromotion, getOverdraw_asStaff, getOverdraw_asManager
+from django.urls import re_path as url
+from offer.views import * #echo, updateView, searchView, addPromotion, getOverdraw_asStaff, getOverdraw_asManager
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views as accounts_view
 from django.conf import settings
 from django.conf.urls.static import static
-
+dailyBalanceWork
 urlpatterns = [ 
     path('admin/', admin.site.urls),
     path('', searchView, name='search'),
-    path('<int:pk>/', updateView, name='update'),
+    path('<int:pk>/<int:fuel_typ>/', updateView, name='update'),
     path('success/', echo, name='echo'),
     path('promotion/', addPromotion, name='promotion'),
-    path('overdraw/', getOverdraw_asStaff, name='overdraw'),
-    path('overfilled/', getOverdraw_asManager, name='overFilled'),
+    path('overdraw/', getOverdraw_asAuditor, name='overdraw'),
+    #path('overfilled/', getOverdraw_asManager, name='overFilled'),
+    path('overfilled/<int:id>/', getOverdraw_asManager, name='overfilledAgent'),
+    path('balance/<int:id>/', dailyBalanceWork, name='balance'),
+    path('approve/<int:id>/', approve, name='approve'),
+    path('audit/', unaudited, name='audit'),
+    url('^audit/(?P<pk>[0-9]+)/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})$', approveAudit, name = 'approveAudit'),
+    path('payments/', paymentRequests, name='payments'),
+    path('payments/<int:id>', paymentDetail, name='paymentDetail'),
+    #path('completePayment/<int:id>', completePayment, name='completePayment'),
     path('addmanager/', accounts_view.addManager, name='addManager'),
+    path('addstaff/<str:act>/', accounts_view.addAuditorFinance, name='addAuditorFinance'),
     path('profile/', accounts_view.profile, name='profile'),
     path('profile/<int:id>/', accounts_view.profileEditor, name='profileEditor'),
     path('register/', accounts_view.register, name='register'),
