@@ -20,7 +20,8 @@
  
   </head>
 <body>   
-    <div class="container mt-1 ">
+    <div class="container mt-1 ">  
+
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
             <div class="container-fluid">
               <a class="navbar-brand" href="{% url 'search' %}">LOGO</a>
@@ -30,7 +31,7 @@
               
               <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav">
-                 
+                  <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                   {% if user.is_staff %} 
                     <li class="nav-item dropdown">
                       <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
@@ -89,7 +90,7 @@
                       </ul>                      
                     </li>  
                   {% endif %} 
-                  
+                  </ul>
                 </div>
               </div>
               <div class="collapse navbar-collapse justify-content-end" id="navbarSupportedContent">
