@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import re_path as url
-from offer.views import echo, updateView, searchView, addPromotion, getOverdraw_asManager, approveAudit, getOverdraw_asAuditor, dailyBalanceWork, approve, unaudited, paymentRequests, paymentDetail
+from offer.views import confirmation, echo, updateView, searchView, addPromotion, getOverdraw_asManager, approveAudit, getOverdraw_asAuditor, dailyBalanceWork, approve, unaudited, paymentRequests, paymentDetail
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views as accounts_view
 from django.conf import settings
@@ -37,7 +37,7 @@ urlpatterns = [
     url('^audit/(?P<pk>[0-9]+)/(?P<start_date>\d{4}-\d{2}-\d{2})/(?P<end_date>\d{4}-\d{2}-\d{2})$', approveAudit, name = 'approveAudit'),
     path('payments/', paymentRequests, name='payments'),
     path('payments/<int:id>', paymentDetail, name='paymentDetail'),
-    #path('completePayment/<int:id>', completePayment, name='completePayment'),
+    path('confirmation', confirmation, name='confirmation'),
     path('addmanager/', accounts_view.addManager, name='addManager'),
     path('addstaff/<str:act>/', accounts_view.addAuditorFinance, name='addAuditorFinance'),
     path('profile/', accounts_view.profile, name='profile'),

@@ -69,7 +69,7 @@ class Audited(models.Model):
     money_reciever = models.TextField(null=True, blank=True, max_length=250)
 
     def __str__(self):
-        return self.gasstation.name + ": " + str(self.total_money_compansated) + " --on: " + str(self.date) + "     ("+str(self.date) + " - " + str(self.date) +")"
+        return self.gasstation.name + ": " + str(self.total_money_compansated) + " --on: " + str(self.date) + "     ("+str(self.audit_date_from) + " - " + str(self.audit_date_to) +")"
 
 class Compensation(models.Model):
     financer = models.ForeignKey(User, on_delete=models.DO_NOTHING, related_name='financer',  null=True, blank=True) #Auditor

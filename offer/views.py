@@ -11,7 +11,7 @@ from django.db.models import Sum
 @login_required
 def updateView(request, pk, fuel_typ):
     #if request.user.is_staff or request.user.is_superuser:
-    if request.user.profile.role !='cashier' or request.user.profile.role !='manager':
+    if request.user.profile.role !='cashier' and request.user.profile.role !='manager':
         message = "You have no previlage"
         return render(request, 'echo.html', {'message':message})
         
@@ -226,6 +226,21 @@ def paymentDetail(request, id):
                gasstation = myObj.gasstation
             )
             Compn.save()
-            return render(request, 'paymentConfirm.html',{ 'money_reciever':money_reciever ,'Compn':Compn})
+            if 'ctx' in request.session:
+                del request.session['ctx']
+            ctx = { 'money_reciever':money_reciever ,
+            'financer':Compn.financer.first_name +" " + Compn.financer.last_name ,
+            'total_money':str(Compn.total_money),
+            'audit': str(Compn.audit.id),
+            'gasstation': Compn.gasstation.name,
+            'startD':str(myObj.audit_date_from), 
+            'endD':str(myObj.audit_date_to),
+            'date': str(today),
+            'serial': str(myObj.id) }
+            request.session['ctx'] = ctx
+            return redirect('confirmation')
+            #return render(request, 'paymentConfirm.html',{ 'money_reciever':money_reciever ,'Compn':Compn})
     return render(request, 'paymentDetail.html', {'result':result, 'form':form})
 
+def confirmation(request):
+    return render(request, 'paymentConfirm.html')

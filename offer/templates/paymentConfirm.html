@@ -4,42 +4,50 @@
         Success
     {% endblock %}
     {% block content %}
-    
-        <br>
-    
         <br>
         <div class="card mt-5 bg-light text-center" style="width: 48rem;">
         <!--<img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
         <h5 class="card-title">Payment Confirmation</h5>
         <p class="card-text">
-            <p>Date: {{ Compn.date  }}</p>
-            Serial No. {{ Compn.id }}
+            <p>Date: {{ request.session.ctx.date  }}</p>
+            Gas Station: {{ request.session.ctx.gasstation }}   <br>      
+            Serial No. {{ request.session.ctx.serial }}
             <table  cellpadding = "5" cellspacing = "5" class="bg-light table table-bordered mt-2">
                 <thead >
-                    <th>Gas Station</th>
                     <th>Total payment</th>
                     <th>Audit Number</th>
-                    <th>Payee</th>
+                    <th>Date from</th>
+                    <th>Date to</th>
                     
                 </thead>        
                 
                 <tbody>
                     
                 <tr class="table-success">
-                    <td>{{ Compn.gasstation.name }}</td>
-                    <td>{{ Compn.total_money }}</td>
-                    <td>{{ Compn.audit.id }}</td>
-                    <td>{{ money_reciever }}</td>
+                    <td>{{ request.session.ctx.total_money }}</td>
+                    <td>{{ request.session.ctx.audit }}</td>
+                    <td>{{ request.session.ctx.startD }}</td>
+                    <td>{{ request.session.ctx.endD }}</td>
 
+                </tr>
+                                  
+                <tr class="blank_row"><td colspan="4"></td>
+                
+                <tr>
+                    <td colspan="2" style='border:none;border-bottom-style: hidden;' class="text-end"><h5>Payee: </h5></td>
+                    <td colspan="3">{{request.session.ctx.money_reciever}}</td>
                 </tr>
                 </tbody>              
                                 
             </table>
-            Paid by: {{ Compn.financer.first_name }} {{ Compn.financer.last_name }}
+            <div class="mt-4 text-end ">
+                Paid by: {{ request.session.ctx.financer }}
+
+            </div> 
            
         </p>
-        <div class="my-5">
+        <div class="my-4">
             <a href="{% url 'payments' %}" class="btn btn-primary">Done</a>
             <a href="#" class="btn btn-primary">Print</a>
         </div>
