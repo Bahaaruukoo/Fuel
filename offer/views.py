@@ -66,9 +66,9 @@ def searchView(request):
             if result.status == True:
                 if DailyUsage.objects.filter(vehicle = result, date = today).exists():
                     todaysBalance = DailyUsage.objects.get(vehicle = result, date = today)
-                    return render(request, 'home.html', {'result':result, 'todaysBalance':todaysBalance})    
+                    return render(request, 'home.html', {'result':result, 'used':todaysBalance.used_amount, 'left':todaysBalance.left_amount})    
                 else:                     
-                    return render(request, 'home.html', {'result':result})    
+                    return render(request, 'home.html', {'result':result, 'used':0, 'left':result.permited_amount})    
         
     return render(request, 'home.html', {'form':form1})
 
@@ -244,3 +244,6 @@ def paymentDetail(request, id):
 
 def confirmation(request):
     return render(request, 'paymentConfirm.html')
+
+def readme(request):
+    return render(request, 'readme.html')

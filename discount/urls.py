@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import re_path as url
-from offer.views import confirmation, echo, updateView, searchView, addPromotion, getOverdraw_asManager, approveAudit, getOverdraw_asAuditor, dailyBalanceWork, approve, unaudited, paymentRequests, paymentDetail
+from offer.views import readme, confirmation, echo, updateView, searchView, addPromotion, getOverdraw_asManager, approveAudit, getOverdraw_asAuditor, dailyBalanceWork, approve, unaudited, paymentRequests, paymentDetail
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views as accounts_view
 from django.conf import settings
@@ -47,7 +47,7 @@ urlpatterns = [
     path('addagents/', accounts_view.addAgent, name='addagents'),
     path('login/', LoginView.as_view(template_name='accounts/login.html'), name='login'),
     path('logout/', LogoutView.as_view(template_name='accounts/logout.html'), name='logout'),
-    
+    path('readme/', readme, name='readme')
 ]
 
 if settings.DEBUG:
