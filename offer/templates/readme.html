@@ -4,6 +4,7 @@ Read Me
 {% endblock %}
 {% block content %}
        <div class="card mt-3 bg-light " style="width: 68rem;">
+            
             <!--<img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
               <h5 class="card-title"><strong>Subsidized fuel controlling system for Ethiopia</strong> </h5>
@@ -41,5 +42,36 @@ Read Me
             </div>
         </div>
        
-       
+       <script>
+            const ndef = new NDEFReader();
+            ndef.scan().then(() => {
+            console.log("Scan started successfully.");
+            ndef.onreadingerror = () => {
+                console.log("Cannot read data from the NFC tag. Try another one?");
+            };
+            ndef.onreading = event => {
+                console.log("NDEF message read.");
+                const message = event.message;
+                for (const record of message.records) {
+                    console.log("Record type:  " + record.recordType);
+                    console.log("MIME type:    " + record.mediaType);
+                    console.log("Record id:    " + record.id);
+                    alert(record.message);
+                    switch (record.recordType) {
+                        
+                    case "text":
+                        // TODO: Read text record with record data, lang, and encoding.
+                        break;
+                    case "url":
+                        // TODO: Read URL record with record data.
+                        break;
+                    default:
+                        // TODO: Handle other records with record data.
+                    }
+                }
+            };
+            }).catch(error => {
+            console.log(`Error! Scan failed to start: ${error}.`);
+            });
+       </script>
 {% endblock %}

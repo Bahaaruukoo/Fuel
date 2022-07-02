@@ -6,7 +6,7 @@ from .forms import AuditForm, SearchForm, UpdateForm, PromoCodeForm, PaymentForm
 from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
-
+from django.conf import settings
 # Create your views here.
 @login_required
 def updateView(request, pk, fuel_typ):
@@ -69,7 +69,7 @@ def searchView(request):
                     return render(request, 'home.html', {'result':result, 'used':todaysBalance.used_amount, 'left':todaysBalance.left_amount})    
                 else:                     
                     return render(request, 'home.html', {'result':result, 'used':0, 'left':result.permited_amount})    
-        
+        print(settings.PATH_DIRS)
     return render(request, 'home.html', {'form':form1})
 
 @login_required
