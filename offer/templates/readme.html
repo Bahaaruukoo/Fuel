@@ -4,10 +4,11 @@ Read Me
 {% endblock %}
 {% block content %}
        <div class="card mt-3 bg-light " style="width: 68rem;">
-            
+        <a class="" href="#"></a>
+              
             <!--<img src="..." class="card-img-top" alt="..."> -->
             <div class="card-body">
-              <h5 class="card-title"><strong>Subsidized fuel controlling system for Ethiopia</strong> </h5>
+              <h5 class="card-title" id="read"><strong>Subsidized fuel controlling system for Ethiopia</strong> </h5>
               <p class="card-text">                
                 
                 <p>
@@ -42,21 +43,4 @@ Read Me
             </div>
         </div>
        
-       <script>
-            try {
-                const ndef = new NDEFReader();
-                await ndef.scan();
-                alert("> Scan started");
-
-                ndef.addEventListener("readingerror", () => {
-                alert("Argh! Cannot read data from the NFC tag. Try another one?");
-                });
-
-                ndef.addEventListener("reading", ({ message, serialNumber }) => {
-                alert(`> Serial Number: ${serialNumber} Records: (${message.records.length})`);
-                });
-            } catch (error) {
-                alert("Argh! " + error);
-            }
-       </script>
 {% endblock %}
