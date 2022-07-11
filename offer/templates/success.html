@@ -1,32 +1,32 @@
 {% extends 'base.html' %}
-
+{% load static %}
     {% block title %}
         Success
     {% endblock %}
     {% block content %}
-    
-        <br>
-    {% if result %} 
-        <br>
-        <div class="card mt-5 bg-light text-center" style="width: 18rem;">
+
+    {% if message %} 
+    <div class="card mt-3 bg-light text-center" style="width: 18rem;">
         <!--<img src="..." class="card-img-top" alt="..."> -->
         <div class="card-body">
-            <h4 class="my-3">Successfully updated</h4>
-        <h5 class="card-title">{{ result }} Info</h5>
-        <p class="card-text">
-            <Ul>
-                <li>Permited: {{result.permited_amount}}</li>
-                <li>Used: {{usage.used_amount}}</li>
-                <li>Left: {{usage.left_amount}}</li>
-            </Ul>
-        </p>
-        <a href="{% url 'search' %}" class="btn btn-primary">OK</a>
-        </div>
-        </div>
-    {% endif %}
-       
-        
-     
+        <h5 class="card-title"><h4>{{message}}</h4></h5>
+        <p class="card-text">            
+            <h4>
+                Price: {{ request.session.ctx.price }} <br>
+                Discount: {{ request.session.ctx.discount }}
+                <hr>
+                <hr>
+                Final: {{ request.session.ctx.final }}
+            </h4>
+            
+        </p>           
+        <a  href="{% url 'search' %}" class="btn btn-primary ml-5"><h4>OK</h4></a>
+    </div>
+    </div>
+
+    {% endif %} 
+      
+         
   
     {% endblock %}
    

@@ -12,6 +12,7 @@ class Fuel(models.Model):
   
     fuel_type = models.CharField(max_length=40, choices=fuelType)
     price = models.DecimalField(decimal_places=2, max_digits=30)
+    subsidy_amount = models.DecimalField(blank=True, null= True, decimal_places=2, max_digits=30)
     date = models.DateField(default=timezone.now)
     active = models.BooleanField(default=True)
     user = models.ForeignKey(User, on_delete=models.DO_NOTHING)

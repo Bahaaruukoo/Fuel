@@ -31,7 +31,7 @@
     <div class="container mt-1 ">  
       <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
         <div class="container-fluid">
-          <a class="navbar-brand" href="{% url 'search' %}"><img class="rounded-3" src="{%static 'fuel.png'%}" alt="LOGO" width="40" height="40"></a>
+          <a class="navbar-brand py-0" href="{% url 'search' %}"><span style='font-size:35px;'>&#9981;</span></a>
           <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
           </button>
@@ -44,7 +44,8 @@
                 </a>
                 <ul class="dropdown-menu" aria-labelledby="navbarDropdown">
                   
-                  <li><a class="dropdown-item" href="{% url 'promotion' %}">Add Promo</a></li>
+                  <li><a class="dropdown-item" href="{% url 'promotion' %}">Add Promo receiver</a></li>
+                  <li><a class="dropdown-item" href="{% url 'addGasStaion' %}">Add gas staion</a></li>
                   <li><a class="dropdown-item" href="{% url 'addManager' %}">Add gas staion manager</a></li>
                   <li><a class="dropdown-item" href="{% url 'addAuditorFinance' act='auditor' %}">Add Auditor</a></li>
                   <li><a class="dropdown-item" href="{% url 'addAuditorFinance' act='finance' %}">Add Finance</a></li>
@@ -95,19 +96,20 @@
                       </ul>                      
                     </li>  
                   {% endif %} 
+                    {% if user.is_authenticated %}
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'profile' %}"><h5>{{user.username}}</h5></a>                            
+                      </li>
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'logout' %}"><h5>Logout</h5></a>                                   
+                      </li>
+                    {% else %}
+                      <li class="nav-item">
+                        <a class="nav-link active" aria-current="page" href="{% url 'login' %}"><h5>Login</h5></a>                  
+                      </li>
+                    {% endif %}
                   
-                {% if user.is_authenticated %}
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="{% url 'profile' %}">{{user.username}}</a>                            
-                    </li>
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="{% url 'logout' %}"><h5>Logout</h5></a>                                   
-                    </li>
-                  {% else %}
-                    <li class="nav-item">
-                      <a class="nav-link active d-flex float-end" aria-current="page" href="{% url 'login' %}"><h4>Login</h4></a>                  
-                    </li>
-                  {% endif %}	
+                	
                
             </ul>
             <!--
@@ -141,58 +143,7 @@
       $("#id_start_date").datepicker({changeYear: true,changeMonth: true, dateFormat: 'yy-mm-dd'})
       $("#id_end_date").datepicker({changeYear: true,changeMonth: true, dateFormat: 'yy-mm-dd'})
       
-              document.getElementById("read").addEventListener("click", async () => {
-                
-                log("readLog", "User clicked read button");
-
-                try {
-                    const ndef = new NDEFReader();
-                    await ndef.scan();
-                    log("readLog", "> Scan started");
-
-                    ndef.addEventListener("readingerror", () => {
-                    log(
-                        "readLog",
-                        "Argh! Cannot read data from the NFC tag. Try another one?"
-                    );
-                    });
-
-                    ndef.addEventListener("reading", ({ message, serialNumber }) => {
-                    log("readLog", `> Serial Number: ${serialNumber}`);
-                    log("readLog", `> Records: (${message.records.length})`);
-                    alert(message.records.length);
-                    const decoder = new TextDecoder();
-                    for (const record of message.records) {
-                        switch (record.recordType) {
-                        case "text":
-                            const textDecoder = new TextDecoder(record.encoding);
-                            log(
-                            "readLog",
-                            `Text: ${textDecoder.decode(record.data)} (${record.lang})`
-                            );
-                            break;
-                        case "url":
-                            log("readLog", `URL: ${decoder.decode(record.data)}`);
-                            break;
-                        case "mime":
-                            if (record.mediaType === "application/json") {
-                            log(
-                                "readLog",
-                                `JSON: ${JSON.parse(decoder.decode(record.data))}`
-                            );
-                            } else {
-                            log("readLog", `Media not handled`);
-                            }
-                            break;
-                        default:
-                            log("readLog", `Record not handled`);
-                        }
-                    }
-                    });
-                } catch (error) {
-                    log("readLog", "Argh! " + error);
-                }
-                });
+             
        
       });
     </script>

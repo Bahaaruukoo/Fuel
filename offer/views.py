@@ -6,14 +6,22 @@ from .forms import AuditForm, SearchForm, UpdateForm, PromoCodeForm, PaymentForm
 from datetime import date
 from django.contrib.auth.decorators import login_required
 from django.db.models import Sum
+from django.views.generic import CreateView
 from django.conf import settings
+
 # Create your views here.
 @login_required
 def updateView(request, pk, fuel_typ):
     #if request.user.is_staff or request.user.is_superuser:
+    if request.user.is_superuser:
+        message = "You have no previlage"
+        emoji = "9940"#"128532"
+        return render(request, 'echo.html', {'message':message, 'emoji':emoji})
+        
     if request.user.profile.role !='cashier' and request.user.profile.role !='manager':
         message = "You have no previlage"
-        return render(request, 'echo.html', {'message':message})
+        emoji = "9940"#"128532"
+        return render(request, 'echo.html', {'message':message, 'emoji':emoji})
         
     offer = get_object_or_404(Gas_offer, pk=pk)
     if offer.status == False:
@@ -44,14 +52,29 @@ def updateView(request, pk, fuel_typ):
            fl = Fuel.objects.get(id = fuel_typ)
            log = log_table.objects.create(user=request.user, vehicle = offer, fuel = fl, gasstation=request.user.profile.gasstation, date=today, filled_amount= filled_amount, over_draw=over)
            log.save()
-           return redirect('echo') #render(request, 'success.html', {'result':offer, 'usage':usage})
+           price = filled_amount * fl.price
+           discount = filled_amount * fl.subsidy_amount
+           final =  price - discount
+           
+           if 'ctx' in request.session:
+                del request.session['ctx']
+           ctx = { 'price':str(price) , 'discount': str(discount), 'final': str(final)         
+           }
+           request.session['ctx'] = ctx
+
+           return redirect('updateSucceed') #render(request, 'success.html', {'result':offer, 'usage':usage})
     return render(request, 'updateOffer.html', {'form':form})
+def updateSucceed(request):
+    message = "Successfully Updated"
+    return render(request, 'success.html', {'message': message})
 
 def echo(request):
-    message = "Successfully Completed"
+    message = "Successfully Completed"    
+    emoji = '9989'
     return render(request, 'echo.html', {'message': message})
 
 def searchView(request):
+
     message = "Not subsidy previlaged"
     form1 = SearchForm()
     if request.method == 'POST':
@@ -62,7 +85,7 @@ def searchView(request):
             if Gas_offer.objects.filter(plate_number=searchWord).exists():
                 result = Gas_offer.objects.get(plate_number=searchWord)
             else:
-                return render(request, 'echo.html', {'message':message, 'form':form1})
+                return render(request, 'noDiscount.html', {'message':message, 'emoji':'128532'})
             if result.status == True:
                 if DailyUsage.objects.filter(vehicle = result, date = today).exists():
                     todaysBalance = DailyUsage.objects.get(vehicle = result, date = today)
@@ -171,14 +194,14 @@ def approveAudit(request ,pk, start_date, end_date):
     gasst_id = pk #request.get('pk')
     startD = start_date #request.get('start_date')
     endD = end_date #request.get('end_date')    
-    ben_price = 0
-    pet_price = 0
+    ben_compensation = 0
+    pet_compensation = 0
     fuelData = Fuel.objects.all()
     for data in fuelData:
         if data.fuel_type == 'benzene':
-            ben_price = data.price
+            ben_compensation = data.subsidy_amount
         elif data.fuel_type == 'petrol':
-            pet_price = data.price
+            pet_compensation = data.subsidy_amount
 
     gas_station = Gasstation.objects.get(id = gasst_id)
     unaudited_result = log_table.objects.filter(gasstation = gas_station, date__gte= startD, date__lte=endD, audited__isnull = True)
@@ -190,8 +213,8 @@ def approveAudit(request ,pk, start_date, end_date):
         elif result.fuel.fuel_type == 'petrol':
             compensated_pet +=  result.filled_amount + result.over_draw
     compensated_fuel = compensated_ben + compensated_pet
-    money_for_ben = compensated_ben * ben_price
-    money_for_pet = compensated_pet * pet_price
+    money_for_ben = compensated_ben * ben_compensation
+    money_for_pet = compensated_pet * pet_compensation
     money_compansated = money_for_ben + money_for_pet
 
     audit = Audited.objects.create(user=request.user, date=today, 
@@ -245,5 +268,15 @@ def paymentDetail(request, id):
 def confirmation(request):
     return render(request, 'paymentConfirm.html')
 
+class addGasStaion(CreateView):    
+    model = Gasstation
+    fields = '__all__'
+    template_name= 'addStaions.html'
+    success_url = '/addgasstaion/'
+
+
 def readme(request):
     return render(request, 'readme.html')
+
+def recordSale(request):
+    return render(request, 'recordSale.html')

@@ -1,12 +1,13 @@
 {% extends 'base.html' %}
 
       {% block content %}
-        <div class="container mt-5" >
-        <div class="d-flex justify-content-center " >
-        <h2>Successfully logged out {{ user.username }}</h2>
-        </div>
-    
-        </div> 
+        <div class="container-fluid mt-5" >
+        <div class="justify-content-center " >
          
+          <h2 class="text-center">Successfully logged out</h2>
+          <h5 class="text-center mt-5"><a href="{% url 'login' %}">Login again</a></h5>
+        
+        </div> 
+        </div>
       {% endblock %}
     

@@ -16,7 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from django.urls import re_path as url
-from offer.views import readme, confirmation, echo, updateView, searchView, addPromotion, getOverdraw_asManager, approveAudit, getOverdraw_asAuditor, dailyBalanceWork, approve, unaudited, paymentRequests, paymentDetail
+from offer.views import recordSale, readme, addGasStaion, updateSucceed, confirmation, echo, updateView, searchView, addPromotion, getOverdraw_asManager, approveAudit, getOverdraw_asAuditor, dailyBalanceWork, approve, unaudited, paymentRequests, paymentDetail
 from django.contrib.auth.views import LoginView, LogoutView
 from accounts import views as accounts_view
 from django.conf import settings
@@ -27,9 +27,11 @@ urlpatterns = [
     path('', searchView, name='search'),
     path('<int:pk>/<int:fuel_typ>/', updateView, name='update'),
     path('success/', echo, name='echo'),
+    path('updateSucceed/', updateSucceed, name='updateSucceed'), 
     path('promotion/', addPromotion, name='promotion'),
+    path('addgasstaion/', addGasStaion.as_view(), name='addGasStaion'),
     path('overdraw/', getOverdraw_asAuditor, name='overdraw'),
-    #path('overfilled/', getOverdraw_asManager, name='overFilled'),
+    path('recordSale/', recordSale, name='recordSale'),
     path('overfilled/<int:id>/', getOverdraw_asManager, name='overfilledAgent'),
     path('balance/<int:id>/', dailyBalanceWork, name='balance'),
     path('approve/<int:id>/', approve, name='approve'),

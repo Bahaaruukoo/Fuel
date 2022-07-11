@@ -13,51 +13,36 @@
                 <div class="accordion-item">
                   <h2 class="accordion-header" id="headingOne">
                     <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-                      Qajeelfama
+                      Qajeelfama / መመርያ / Tilmaanta
                     </button>
                   </h2>
                   <div id="collapseOne" class="accordion-collapse collapse " aria-labelledby="headingOne" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
-                      <strong>Qajeefama armaan gadii hordofaa:</strong> 
+                      <div>
+                        <strong>Qajeefama armaan gadii hordofaa:</strong> 
                       <ol>
                         <li>Lakkoofsa gabatee saanduqa armaan gadiitti galchaa </li>
                         <li>Batanii armaan gadii tuqaa</li>
                       </ol>
                       </div>
-                  </div>
-                </div>
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingTwo">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        መመርያ                                                 
-                    </button>
-                  </h2>
-                  <div id="collapseTwo" class="accordion-collapse collapse" aria-labelledby="headingTwo" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
                       <strong>ከዚህ በታች ያለውን መመርያ ይከተሉ</strong>
-                      <ol>
+                      <div>
+                        <ol>
                           <li>ከታች ባለው ሳጥን ውስጥ የሰሌዳ ቁጥር ይሙሉ</li>
                           <li>ከታች ያለውን የፈልግ መድብ ይንኩ</li>
                       </ol>
-                    </div>
+                      </div>
+                      <div>
+                        <strong>Raac tilmaamaha hoose</strong>
+                        <ol>
+                          <li>Geli aqoonsiga gaadhiga sanduuqa hoose</li>
+                          <li>Guji badhanka hoose</li>
+                        </ol>
+                      </div>
+                      </div>
                   </div>
                 </div>
-                <div class="accordion-item">
-                  <h2 class="accordion-header" id="headingThree">
-                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        Tilmaanta
-                    </button>
-                  </h2>
-                  <div id="collapseThree" class="accordion-collapse collapse" aria-labelledby="headingThree" data-bs-parent="#accordionExample">
-                    <div class="accordion-body">
-                      <strong>Raac tilmaamaha hoose</strong>
-                      <ol>
-                        <li>Geli aqoonsiga gaadhiga sanduuqa hoose</li>
-                        <li>Guji badhanka hoose</li>
-                      </ol>
-                    </div>
-                  </div>
-                </div>
+                
               </div>
             </div>
         </div> 
@@ -93,9 +78,12 @@
 
                                 <h4><strong>{{result.fuel}}</strong></h4>
                                 
-                            </div>         
-                          <a href="{% url 'update' pk=result.id fuel_typ=result.fuel.id %}" class="btn btn-warning">Gas Filled</a>
-                          <a href="{% url 'search' %}" class="btn btn-primary"> Back</a>
+                            </div> 
+                            <div>
+                                <a href="{% url 'update' pk=result.id fuel_typ=result.fuel.id %}" class="btn btn-warning mt-3">Gas Filled</a>
+                                <a href="{% url 'search'  %}" class="btn btn-primary mt-3"> Back</a>
+                                                            
+                            </div>  
                         </div>
                     </div>               
                     {% endif %}                
